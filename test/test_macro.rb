@@ -1,5 +1,5 @@
 =begin
-rmacro - a macro utility like the one of Common Lisp for Ruby
+Rmacro - A macro utility similar to Common Lisp macros for Ruby
 
 (The MIT License)
 
@@ -33,12 +33,6 @@ require 'macro'
 class MacroDefs
   def my_if(condition, clause)
     s(:if, condition, clause, nil)
-  end
-
-  def ntimes(n, body)
-    bq("#{c(n)}.times do
-          #{c(body)}
-        end")
   end
 
   def time(code)

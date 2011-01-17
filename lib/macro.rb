@@ -1,5 +1,5 @@
 =begin
-rmacro - a macro utility like the one of Common Lisp for Ruby
+Rmacro - A macro utility similar to Common Lisp macros for Ruby
 
 (The MIT License)
 
