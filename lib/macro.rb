@@ -349,8 +349,10 @@ class Macro
   def to_str(arg)
     if arg.is_a?(Symbol)
       ":" + arg.to_s
-    elsif arg.nil? == true
+    elsif arg.nil?
       "nil"
+    elsif arg.is_a?(String)
+      "'#{arg}'"
     else
       arg.to_s
     end
@@ -362,8 +364,12 @@ class Macro
   end
 
   def sexp_to_xml(sexps)
-    if sexps.is_a?(Enumerable)
-      "<" + to_str(sexps.class) + ">" + sexps.inject("") { |result, sexp| result + sexp_to_xml(sexp) } + "</" + to_str(sexps.class) + ">"
+    "<?xml version=\"1.0\"?>" + _sexp_to_xml(sexps)
+  end
+  
+  def _sexp_to_xml(sexps)
+    if sexps.is_a?(Array)
+      "<" + to_str(sexps.class) + ">" + sexps.inject("") { |result, sexp| result + _sexp_to_xml(sexp) } + "</" + to_str(sexps.class) + ">"
     else
       to_elt(sexps)
     end

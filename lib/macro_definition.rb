@@ -55,12 +55,6 @@ class MacroDefinition
     bq(code)
   end
 
-  def ntimes(n, body)
-    bq("#{c(n)}.times do
-          #{c(body)}
-        end")
-  end
-
   def all_indices (array, start_index, ignore)
     indices = []
     array.each_with_index do |each, index|
@@ -99,5 +93,12 @@ class MacroDefinition
     index
   end
 
+  def ntimes(n, body)
+    bq("#{c(n)}.times do
+          #{c(body)}
+        end")
+  end
+
   private :all_indices, :all_indices_for_binding, :item_at_index, :index_string
+
 end

@@ -352,7 +352,7 @@ class TestMacro < Test::Unit::TestCase
   end
 
   def test_sexp_to_xml
-    assert_equal("<Sexp>
+    assert_equal("<?xml version=\"1.0\"?><Sexp>
 <Symbol>
 :lasgn
 </Symbol>
