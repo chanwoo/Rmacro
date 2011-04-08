@@ -25,13 +25,13 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 =end
 
-require 'english'
 require 'rubygems'
 gem 'ruby_parser'
 require 'ruby_parser'
 gem 'ruby2ruby'
 require 'ruby2ruby'
 require 'rexml/document'
+require 'code'
 
 class Macro
 
@@ -219,12 +219,12 @@ class Macro
     end
   end
 
-  # Returns an array of arguments of a call.
+  # Returns an array of arguments as code strings of a call.
   # e.g. args(s(:call, nil, :hello, s(:arglist, s(:str, "John")))) => [s(:str, "John")]
   # e.g. args(s(:call, nil, :max, s(:arglist, s(:lit, 1), s(:lit, 2)))) => [s(:lit, 1), s(:lit, 2)]
   def args(sexp)
     if call_site?(sexp)
-      rest(sexp[3])
+      (rest(sexp[3])).collect { |each| (Code.from_s_expression(each)).to_s }
     else
       []
     end
@@ -254,7 +254,7 @@ class Macro
   def expand(sexp, defs)
     Sexp.from_array(depth_first_exhaustive_collect(sexp,
                                                    lambda { |exp| expandable?(exp, defs) },
-                                                   lambda { |exp| defs[call_keys(exp)].call(*args(exp)) }))
+                                                   lambda { |exp| (Code.from_string(defs[call_keys(exp)].call(*args(exp)))).to_s_expression }))
   end
 
   # Accepts code strings and applies macro functions of macro definition objects, then returns the expanded code strings.
@@ -366,7 +366,7 @@ class Macro
   def sexp_to_xml(sexps)
     "<?xml version=\"1.0\"?>" + _sexp_to_xml(sexps)
   end
-  
+
   def _sexp_to_xml(sexps)
     if sexps.is_a?(Array)
       "<" + to_str(sexps.class) + ">" + sexps.inject("") { |result, sexp| result + _sexp_to_xml(sexp) } + "</" + to_str(sexps.class) + ">"

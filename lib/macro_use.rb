@@ -25,6 +25,9 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 =end
 
+require 'macro'
+require 'macro_definition'
+
 class MacroUse
   def self.destructuring_bind
     anArray = [1, [2, 3], 4]
@@ -36,5 +39,16 @@ class MacroUse
     anArray = [1, [2, [3, 4]], 5]
     destructuring_bind([a, [b, _], c], anArray)
     [a, b, c]
+  end
+
+  def self.destructuring_bind3
+    anArray = [1, [2, 3], 4]
+    eval(MacroDefinition.new.destructuring_bind(%Q{[a, [b, c], d]}, %Q{anArray}))
+#    eval("a = 1")
+#    eval("b = 2")
+#    eval("c = 3")
+#    eval("d = 4")
+#    class_eval([a, b, c, d])
+    eval("[a, b, c, d]")
   end
 end

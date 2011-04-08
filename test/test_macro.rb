@@ -32,46 +32,46 @@ require 'macro'
 
 class MacroDefs
   def my_if(condition, clause)
-    s(:if, condition, clause, nil)
+    (Code.from_s_expression(s(:if, Code.from_string(condition).to_s_expression, Code.from_string(clause).to_s_expression, nil))).to_s
   end
 
   def time(code)
     now = gensym(:now)
-    bq("
+    %Q{
       #{now} = Time.now
-      #{c(code)}
+      #{code}
       Time.now - #{now}
-      ")
+      }
   end
 
   def delay(code)
-    bq("
-      lambda { #{c(code)} }
-      ")
+    %Q{
+      lambda { #{code} }
+      }
   end
 
   def MacroDefs.my_when(test, body)
-    bq("
-      my_if(#{c(test)},
-            #{c(body)})
-      ")
+    %Q{
+      my_if(#{test},
+            #{body})
+      }
   end
 
   def my_multiply(a, b)
-    bq("
-      #{c(a)} * #{c(b)}
-      ")
+    %Q{
+      #{a} * #{b}
+      }
   end
 
 
   def progn(*rest)
-    bq(*rest)
+    (Code.block_from_strings(*rest)).to_s
   end
 
   def MacroDefs.my_add(a, b)
-    bq("
-      #{c(a)} + #{c(b)}
-      ")
+    %Q{
+      #{a} + #{b}
+      }
   end
 end
 
@@ -242,9 +242,9 @@ class TestMacro < Test::Unit::TestCase
   end
 
   def test_args
-    assert_equal(s(s(:lit, 1)), @macro.args(@sexp1))
+    assert_equal(["1"], @macro.args(@sexp1))
     assert_equal([], @macro.args(@sexp2))
-    assert_equal(s(s(:call, nil, :a, s(:arglist)), s(:call, nil, :b, s(:arglist))),
+    assert_equal(["a", "b"],
                  @macro.args(@sexp3))
   end
 

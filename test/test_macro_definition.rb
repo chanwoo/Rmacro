@@ -38,5 +38,7 @@ class TestMacroDefinition < Test::Unit::TestCase
                  MacroUse.destructuring_bind)
     assert_equal([1, 2, 5],
                  MacroUse.destructuring_bind2)
+    assert_equal([1, 2, 3, 4],
+                 MacroUse.destructuring_bind3)
   end
 end
