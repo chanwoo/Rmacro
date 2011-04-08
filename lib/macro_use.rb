@@ -43,12 +43,13 @@ class MacroUse
 
   def self.destructuring_bind3
     anArray = [1, [2, 3], 4]
+    a, b, c, d = 0
     eval(MacroDefinition.new.destructuring_bind(%Q{[a, [b, c], d]}, %Q{anArray}))
 #    eval("a = 1")
 #    eval("b = 2")
 #    eval("c = 3")
 #    eval("d = 4")
 #    class_eval([a, b, c, d])
-    eval("[a, b, c, d]")
+    [a, b, c, d]
   end
 end

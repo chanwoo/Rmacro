@@ -81,14 +81,12 @@ class Code
     @content == other.to_s_expression
   end
 
-  def evaluate
-    eval(Ruby2Ruby.new.process(@content.deep_clone))
-  end
-
   def method_missing(name, *args)
     @content.send(name, *args)
   end
 
+  def self.gensym(variables, &name)
+  end
 
   private
 

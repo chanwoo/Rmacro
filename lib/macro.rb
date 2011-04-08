@@ -308,18 +308,18 @@ class Macro
   @@NONEXISTENT_VAR = "_0"
 
   # Generates a nonexistent name just like 'gensym' in Common Lisp.
-  # e.g. gensym() => "_21"
-  # e.g. gensym(:temp) => "temp_14"
-  # e.g. gensym("temp") => "temp_52"
+  # e.g. gensym() => "__generated_name_00"
+  # e.g. gensym(:temp) => "temp__generated_name_00"
+  # e.g. gensym("temp") => "temp__generated_name_01"
   def gensym(var_name = "")
     name = var_name.to_s
     if @@GENSYM_TABLE.key?(name)
-      generated_symbol = name + @@NONEXISTENT_VAR + ((@@GENSYM_TABLE[name]).succ).to_s
+      generated_symbol = name + '__generated_name' + @@NONEXISTENT_VAR + ((@@GENSYM_TABLE[name]).succ).to_s
       @@GENSYM_TABLE[name] = (@@GENSYM_TABLE[name]).succ
       generated_symbol
     else
       @@GENSYM_TABLE[name] = 0
-      name + @@NONEXISTENT_VAR + "0"
+      name + '__generated_name' + @@NONEXISTENT_VAR + "0"
     end
   end
 

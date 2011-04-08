@@ -289,10 +289,10 @@ class TestMacro < Test::Unit::TestCase
   end
 
   def test_gensym
-    assert_equal("_00", gensym)
-    assert_equal("_01", gensym)
-    assert_equal("time_00", gensym(:time))
-    assert_equal("time_01", gensym("time"))
+    assert_equal("__generated_name_00", gensym)
+    assert_equal("__generated_name_01", gensym)
+    assert_equal("time__generated_name_00", gensym(:time))
+    assert_equal("time__generated_name_01", gensym("time"))
   end
 
   def test_macro_expand
