@@ -219,12 +219,12 @@ class Macro
     end
   end
 
-  # Returns an array of arguments as code strings of a call.
+  # Returns an array of arguments as instances of Code class of a call.
   # e.g. args(s(:call, nil, :hello, s(:arglist, s(:str, "John")))) => [s(:str, "John")]
   # e.g. args(s(:call, nil, :max, s(:arglist, s(:lit, 1), s(:lit, 2)))) => [s(:lit, 1), s(:lit, 2)]
   def args(sexp)
     if call_site?(sexp)
-      (rest(sexp[3])).collect { |each| (Code.from_s_expression(each)).to_s }
+      (rest(sexp[3])).collect { |each| Code.from_s_expression(each) }
     else
       []
     end
@@ -254,7 +254,7 @@ class Macro
   def expand(sexp, defs)
     Sexp.from_array(depth_first_exhaustive_collect(sexp,
                                                    lambda { |exp| expandable?(exp, defs) },
-                                                   lambda { |exp| (Code.from_string(defs[call_keys(exp)].call(*args(exp)))).to_s_expression }))
+                                                   lambda { |exp| (defs[call_keys(exp)].call(*args(exp))).to_s_expression }))
   end
 
   # Accepts code strings and applies macro functions of macro definition objects, then returns the expanded code strings.
@@ -404,16 +404,6 @@ def unparse(sexp)
   Macro.new.unparse(sexp)
 end
 
-# A global function for calling an instance method 'back_quote' of a Macro object. Just for the convenience.
-def bq(*rest)
-  Macro.new.back_quote(*rest)
-end
-
-# A global function for calling an instance method 'comma' of a Macro object. Just for the convenience.
-def c(*sexps)
-  Macro.new.comma(*sexps)
-end
-
 # A global function for calling an instance method 'gensym' of a Macro object. Just for the convenience.
 def gensym(var_name = "")
   Macro.new.gensym(var_name)
@@ -449,6 +439,8 @@ def replace_sexp_with_type(sexp, type, function)
   Macro.new.replace_sexp_with_type(sexp, type, function)
 end
 
+=begin
+
 # A global function for calling an instance method 'sexp_to_xml' of a Macro object. Just for the convenience.
 def sexp_to_xml(sexps)
   Macro.new.sexp_to_xml(sexps)
@@ -458,3 +450,15 @@ end
 def xml_to_sexp(xml_str)
   Macro.new.xml_to_sexp(xml_str)
 end
+
+# A global function for calling an instance method 'back_quote' of a Macro object. Just for the convenience.
+def bq(*rest)
+  Macro.new.back_quote(*rest)
+end
+
+# A global function for calling an instance method 'comma' of a Macro object. Just for the convenience.
+def c(*sexps)
+  Macro.new.comma(*sexps)
+end
+
+=end

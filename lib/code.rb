@@ -42,12 +42,12 @@ class Code
     Code.new(RubyParser.new.parse(code_string.deep_clone))
   end
 
-  def self.block_from_strings(*strings)
-    if (strings.length == 1)
-      Code.from_string(strings.first)
+  def self.block_from_codes(*codes)
+    if (codes.length == 1)
+      codes.first
     else
-      Code.from_s_expression(Sexp.from_array(s(:block) + (strings.collect do |string|
-                                                            (Code.from_string(string)).to_s_expression
+      Code.from_s_expression(Sexp.from_array(s(:block) + (codes.collect do |code|
+                                                            code.to_s_expression
                                                           end)))
     end
   end
@@ -130,4 +130,13 @@ class Code
     sexp
   end
 
+end
+
+# Code class constructor
+def c(arg)
+  if arg.is_a?(String)
+    Code.from_string(arg)
+  elsif arg.is_a?(Sexp)
+    Code.from_s_expression(arg)
+  end
 end

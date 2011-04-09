@@ -38,7 +38,7 @@ class MacroDefinition
     macro_helper = Macro.new
     # parse("[a, [b, c], _]")
     # => s(:array, s(:call, nil, :a, s(:arglist)), s(:array, s(:call, nil, :b, s(:arglist)), s(:call, nil, :c, s(:arglist))), s(:call, nil, :_, s(:arglist)))
-    symbol_array = macro_helper.exhaustive_collect(macro_helper.exhaustive_collect((Code.from_string(template)).to_s_expression,
+    symbol_array = macro_helper.exhaustive_collect(macro_helper.exhaustive_collect(template.to_s_expression,
                                                                                    lambda {|expr| expr.is_a?(Array) and (expr.first == :call)},
                                                                                    lambda {|expr| expr[2]}),
                                                    lambda {|expr| expr.is_a?(Array) and (expr.first == :array)},
@@ -52,7 +52,7 @@ class MacroDefinition
     indices.each do |each|
       code = code + %Q{ #{item_at_index(symbol_array, each)} = #{array_name}#{index_string(each)} \n }
     end
-    code
+    Code.from_string(code)
   end
 
   def all_indices (array, start_index, ignore)
@@ -94,7 +94,7 @@ class MacroDefinition
   end
 
   def ntimes(n, body)
-    %Q{ #{n}.times do #{body} end }
+    Code.from_string(%Q{ #{n}.times do #{body} end })
   end
 
   private :all_indices, :all_indices_for_binding, :item_at_index, :index_string

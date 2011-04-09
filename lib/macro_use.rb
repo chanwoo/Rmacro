@@ -44,7 +44,7 @@ class MacroUse
   def self.destructuring_bind3
     anArray = [1, [2, 3], 4]
     a, b, c, d = 0
-    eval(MacroDefinition.new.destructuring_bind(%Q{[a, [b, c], d]}, %Q{anArray}))
+    eval(MacroDefinition.new.destructuring_bind(c(%Q{[a, [b, c], d]}), c(%Q{anArray})).to_s)
 #    eval("a = 1")
 #    eval("b = 2")
 #    eval("c = 3")
